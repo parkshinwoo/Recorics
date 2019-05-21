@@ -1,0 +1,103 @@
+```{r}
+library(readxl)
+naver_chart <- read_excel("chart_data.xlsx")
+naver_chart
+```
+```{r}
+agg_rank <- aggregate(x=naver_chart$rank_score, list(artist=naver_chart$artist),FUN=sum)
+View(agg_rank)
+
+```
+```{r}
+artist_count <- table(naver_chart$artist)
+str(artist_count)
+```
+```{r}
+artist_count_df <- as.data.frame(artist_count)
+View(artist_count_df)
+```
+```{r}
+names(artist_count_df) <- c("artist", "count")
+View(artist_count_df)
+```
+
+```{r}
+install.packages("dplyr")
+library(dplyr)
+```
+```{r}
+artist_title_count_df <- naver_chart %>% group_by(artist, title) %>% summarize(title_count=n())
+View(artist_title_count_df)
+```
+```{r}
+artist_title_number_df <- artist_title_count_df %>% group_by(artist) %>% summarize(title_number=n())
+View(artist_title_number_df)
+```
+```{r}
+artist_year_points <- naver_chart %>% group_by(year, artist) %>% summarize(artist_year_point=sum(rank_score))
+View(artist_year_points)
+```
+```{r}
+artist_year_points_max <- artist_year_points %>% group_by(artist) %>% summarize(artist_year_point_max=max(artist_year_point))
+View(artist_year_points_max)
+```
+```{r}
+artist_year_points_merge <- merge(x=artist_year_points, y=artist_year_points_max, by.x=c("artist", "artist_year_point"), by.y=c("artist", "artist_year_point_max"))
+View(artist_year_points_merge)
+```
+```{r}
+names(artist_year_points_merge)[3] <- c("max_year")
+names(artist_year_points_merge)[2] <- c("artist_max_year_point")
+```
+```{r}
+agg_artist <- merge(artist_title_number_df, artist_count_df, by="artist")
+View(agg_artist)
+```
+```{r}
+agg_artist <- merge(agg_artist, agg_rank, by="artist")
+View(agg_artist)
+```
+```{r}
+names(agg_artist)[4] <- c("artist_point")
+View(agg_artist)
+```
+```{r}
+agg_artist <- merge(agg_artist, artist_year_points_merge, by="artist")
+View(agg_artist)
+```
+```{r}
+summary(agg_artist)
+```
+```{r}
+boxplot(agg_artist$title_number, main="차트에 등록된 가수별 곡 개수", ylab="곡 개수")
+```
+```{r}
+boxplot(agg_artist$count, main="차트에 등록괸 가수별 노출빈도", ylab="노출수")
+```
+```{r}
+boxplot(agg_artist$artist_point, main="차트에 등록된 가수별 점수", ylab="점수")
+```
+```{r}
+agg_artist2 <- filter(agg_artist, artist_point > 0.83857)
+```
+```{r}
+summary(agg_artist2)
+```
+```{r}
+agg_artist3 <- filter(agg_artist2, artist_point > 6.9539)
+summary(agg_artist3)
+```
+```{r}
+agg_artist4 <- filter(agg_artist3, artist_point > 13.892)
+summary(agg_artist4)
+```
+```{r}
+radius <- agg_artist4$artist_point/pi
+symbols(agg_artist4$count, agg_artist4$title_number, circles=radius, inches = 0.3)
+text(agg_artist4$count, agg_artist4$title_number, agg_artist4$artist, cex=1)
+```
+```{r}
+write.csv(agg_artist4, file = "agg_artist4.csv")
+```
+
+

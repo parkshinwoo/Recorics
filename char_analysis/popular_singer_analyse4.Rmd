@@ -1,0 +1,41 @@
+```{r}
+group1 <- subset(agg_artist4, subset = (cluster==1))
+group2 <- subset(agg_artist4, subset = (cluster==2))
+group3 <- subset(agg_artist4, subset = (cluster==3))
+group4 <- subset(agg_artist4, subset = (cluster==4))
+group5 <- subset(agg_artist4, subset = (cluster==5))
+group6 <- subset(agg_artist4, subset = (cluster==6))
+
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=working_density), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group1, aes(y=as.numeric(title_number)-sqrt(working_density)/10, label=artist), vjust=1, colour="grey40", size=3)+ggtitle("Bubble chart about Artists between 2009 and 2019-3(Group1)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=working_density), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group2, aes(y=as.numeric(title_number)-sqrt(working_density)/10, label=artist), vjust=1, colour="grey40", size=3)+ggtitle("Bubble chart about Artists between 2009 and 2019-3(Group2)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=working_density), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group3, aes(y=as.numeric(title_number)-sqrt(working_density)/10, label=artist), vjust=1, colour="grey40", size=3)+ggtitle("Bubble chart about Artists between 2009 and 2019-3(Group3)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=working_density), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group4, aes(y=as.numeric(title_number)-sqrt(working_density)/10, label=artist), vjust=1, colour="grey40", size=3)+ggtitle("Bubble chart about Artists between 2009 and 2019-3(Group4)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=working_density), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group5, aes(y=as.numeric(title_number)-sqrt(working_density)/10, label=artist), vjust=1, colour="grey40", size=3)+ggtitle("Bubble chart about Artists between 2009 and 2019-3(Group5)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=working_density), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group6, aes(y=as.numeric(title_number)-sqrt(working_density)/10, label=artist), vjust=1, colour="grey40", size=3)+ggtitle("Bubble chart about Artists between 2009 and 2019-3(Group6)")
+```
+```{r}
+summary(agg_artist4$working_density)
+```
+```{r}
+group_high_density <- subset(agg_artist4, subset=(working_density>=1.8914))
+group_low_density <- subset(agg_artist4, subset=(working_density<=0.6207))
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=working_density), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group_high_density, aes(y=as.numeric(title_number)-sqrt(working_density)/10, label=artist), vjust=1, colour="grey40", size=3)+ggtitle("Bubble chart about Artists between 2009 and 2019-3(Highest 25% of the working density)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=working_density), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group_low_density, aes(y=as.numeric(title_number)-sqrt(working_density)/10, label=artist), vjust=1, colour="grey40", size=3)+ggtitle("Bubble chart about Artists between 2009 and 2019-3(Lowest 25% of the working density)")
+```
+

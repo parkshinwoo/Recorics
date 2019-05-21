@@ -1,0 +1,12 @@
+```{r}
+install.packages("arules") #아프리오리 알고리즘
+library(arules)
+```
+```{r}
+period <- read.transactions("period.txt", sep="\t", quote = "", encoding = "UTF-8")
+summary(period)
+```
+```{r}
+itemFrequencyPlot(period, topN=20)
+```
+

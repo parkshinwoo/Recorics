@@ -1,0 +1,78 @@
+```{r}
+install.packages("rJava")
+install.packages("memoise")
+install.packages("KoNLP")
+```
+```{r}
+Sys.setenv(JAVA_HOME="C:/Program Files/Java/jre1.8.0_181")
+library(KoNLP)
+library(dplyr)
+```
+```{r}
+useNIADic()
+```
+```{r}
+txt <- readLines("janggiha.txt", encoding = "UTF-8")
+head(txt)
+```
+```{r}
+install.packages("stringr")
+```
+```{r}
+library(stringr)
+```
+```{r}
+extractNoun("대한민국의 영토는 한반도와 그 부속도서로 한다")
+```
+```{r}
+nouns <- extractNoun(txt)
+```
+```{r}
+wordcount <- table(unlist(nouns))
+```
+```{r}
+df_word <- as.data.frame(wordcount, stringsAsFactors = F)
+```
+```{r}
+df_word <- rename(df_word, word=Var1, freq=Freq)
+```
+```{r}
+df_word <- filter(df_word, nchar(word) >= 2)
+```
+```{r}
+top_20 <- df_word %>% arrange(desc(freq)) %>% head(20)
+```
+```{r}
+top_20
+```
+```{r}
+install.packages("wordcloud")
+```
+```{r}
+library(wordcloud)
+library(RColorBrewer)
+```
+```{r}
+pal <- brewer.pal(8, "Dark2")
+```
+```{r}
+set.seed(1234)
+```
+```{r}
+wordcloud(word=df_word$word, freq = df_word$freq, min.freq = 2, max.words = 200, random.order = F, rot.per = .1, scale = c(4, 0.6), colors = pal)
+```
+```{r}
+pal <- brewer.pal(9, "Blues")[5:9]
+set.seed(1234)
+```
+```{r}
+wordcloud(word=df_word$word, freq = df_word$freq, min.freq = 2, max.words = 200, random.order = F, rot.per = .1, scale = c(4, 0.6), colors = pal)
+```
+```{r}
+library(ggplot2)
+
+order <- arrange(top_20, freq)$word
+
+ggplot(data = top_20, aes(x = word, y = freq)) + ylim(0, 200) + geom_col() + coord_flip() + scale_x_discrete(limit = order) + geom_text(aes(label = freq), hjust = -0.3)
+```
+

@@ -1,0 +1,20 @@
+```{r}
+agg_artist4 <- read.csv("agg_artist4.csv")
+```
+```{r}
+library(stats)
+interests <- agg_artist4[3:5]
+View(interests)
+```
+```{r}
+interests_z <- as.data.frame(lapply(interests, scale)) # z-score (data-mean)/sd
+View(interests_z)
+```
+```{r}
+artist_clusters <- kmeans(interests_z, 4)
+artist_clusters$size
+```
+```{r}
+artist_clusters$centers 
+```
+

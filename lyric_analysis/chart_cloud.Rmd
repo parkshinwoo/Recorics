@@ -1,0 +1,22 @@
+```{r}
+library(readxl)
+chart <- read_excel("oversea_chart.xlsx")
+```
+```{r}
+artist <- data.frame(table(chart[7]))
+artist
+```
+```{r}
+library(wordcloud)
+library(RColorBrewer)
+library(ggplot2)
+library(dplyr)
+```
+```{r}
+pal <- brewer.pal(8, "Dark2")
+set.seed(1234)
+wordcloud(words = artist$Var1, freq = artist$Freq, min.freq = 1, max.words = 200, random.order = F, rot.per = .1, scale = c(2, 0.4), colors = pal)
+```
+
+
+

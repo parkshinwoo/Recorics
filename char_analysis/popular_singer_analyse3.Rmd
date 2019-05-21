@@ -1,0 +1,89 @@
+```{r}
+library(readxl)
+naver_chart <- read_excel("chart_data.xlsx")
+View(naver_chart)
+```
+```{r}
+library(dplyr)
+```
+```{r}
+naver_chart[,6] <- as.integer(as.character(naver_chart$year))
+str(naver_chart)
+```
+```{r}
+table(naver_chart$year)
+```
+```{r}
+artist_first_last_year <- naver_chart %>% group_by(artist) %>% summarize(first_year=min(year), last_year=max(year))
+```
+```{r}
+View(artist_first_last_year)
+```
+```{r}
+artist_first_last_year[,4] <- artist_first_last_year$last_year - artist_first_last_year$first_year + 1
+```
+```{r}
+colnames(artist_first_last_year)[4] <- c("working_period")
+```
+```{r}
+agg_artist <- merge(agg_artist, artist_first_last_year, by="artist")
+View(agg_artist)
+```
+```{r}
+agg_artist4 <- merge(agg_artist4, artist_first_last_year, by="artist")
+View(agg_artist4)
+```
+```{r}
+agg_artist[,10] <- agg_artist$artist_max_year_point/agg_artist$working_period
+colnames(agg_artist)[10] <- c("working_density") # popularity density
+View(agg_artist)
+```
+```{r}
+agg_artist4[,11] <- agg_artist4$artist_max_year_point/agg_artist4$working_period
+colnames(agg_artist4)[11] <- c("working_density")
+View(agg_artist4)
+```
+```{r}
+# we will use working density now, not artist_point
+agg_artist4<-agg_artist4[,-7]
+View(agg_artist4)
+```
+```{r}
+interests2 <- agg_artist4[3:4]
+interests2[,3] <- agg_artist4[,10]
+colnames(interests2)[3] <- c("working_density")
+View(interests2)
+```
+```{r}
+interests2_z <- as.data.frame(lapply(interests2, scale)) # z-score
+View(interests2_z)
+```
+```{r}
+artist_clusters_new <- kmeans(interests2_z, 6)
+artist_clusters_new$size
+```
+```{r}
+artist_clusters_new$centers
+```
+```{r}
+install.packages("ggplot2")
+library(ggplot2)
+```
+```{r}
+artist_clusters_new3<-kmeans(interests2_z, 6)
+artist_clusters_new3$size
+```
+```{r}
+artist_clusters_new3$centers
+```
+```{r}
+agg_artist4[,11] <- artist_clusters_new3$cluster
+colnames(agg_artist4)[11] <- c("cluster")
+agg_artist4$cluster <- as.factor(agg_artist4$cluster)
+View(agg_artist4)
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=working_density), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(aes(y=as.numeric(title_number)-sqrt(working_density)/10, label=artist), vjust=1, colour="grey40", size=3)+ggtitle("Bubble chart about Artists between 2009 and 2019-3")
+```
+
+
