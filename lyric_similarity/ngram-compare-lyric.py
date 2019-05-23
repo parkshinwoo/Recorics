@@ -53,11 +53,6 @@ three_gram_score_list = []
 three_gram_word_list = []
 
 for s in sentence_list:
-    # 2-gram
-    r2, word2 = diff_ngram(base, s, 2)
-    two_gram_score_list.append(r2)  
-    two_gram_word_list.append(word2)
-
     # 3-gram
     r3, word3  = diff_ngram(base, s, 3)
     three_gram_score_list.append(r2)
