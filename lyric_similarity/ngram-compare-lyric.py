@@ -72,11 +72,9 @@ print('3-gram 분석 결과 가장 유사한 곡: %s\n'%track_info_dict[three_ma
 print('유사도 15%가 넘는 모든 곡을 확인합니다.\n')
 
 tmp_list = []
-dict_sentence = {}
-dict_track = {}
 
 # total = 이중리스트
-# total = [ [곡, 유사도, 문장] ]
+# total = [[곡, 유사도, 문장]]
 total = []
 
 for i in range(0, len(three_gram_score_list)):
@@ -88,4 +86,4 @@ for i in range(0, len(three_gram_score_list)):
 
 total.sort(key=lambda x:x[1], reverse=True)
 for a in total:
-    print('곡: %s / 유사도: %s / 비교된 문장: %s' % (a[0], a[1], a[2]))
+    print('곡: %s / 유사도: %s / 비교된 문장: %s' % (t[0], t[1], t[2]))
