@@ -6,7 +6,7 @@ parser.add_argument('data', help='lyric data you wanna compare with specific sen
 args = parser.parse_args()
 
 data = args.data
-base = input('비교를 원하는 문장을 입력하세요: ')
+base = input('알쏭달쏭한 문장을 입력해주세요!: ')
 
 wb = load_workbook('%s.xlsx'%data)
 track_sheet = wb.worksheets[0]
@@ -49,8 +49,6 @@ def diff_ngram(sa, sb, num):
                 r.append(i)
     return cnt / len(a), r
 
-two_gram_score_list = []
-two_gram_word_list = []
 three_gram_score_list = []
 three_gram_word_list = []
 
@@ -60,34 +58,40 @@ for s in sentence_list:
     three_gram_score_list.append(r3)
     three_gram_word_list.append(word3)
 
-print('\n비교 대상 문장: %s\n'%base)
+print('\n알쏭달쏭, 하지만 찾고 싶은 노래의 문장!: %s\n'%base)
 
 # 3-gram
 three_max_index = three_gram_score_list.index(max(three_gram_score_list)) 
 three_max_track_id = track_id_list[three_max_index]
 
-print('\n3-gram 분석 결과 가장 유사한 문장: %s'%sentence_list[three_max_index])
-print('3-gram 분석 결과 유사한 단어 리스트%s'%three_gram_word_list[three_max_index])
-print('3-gram 분석 결과 가장 유사한 %s의 %s\n'%(track_artist_info_dict[three_max_track_id], track_song_info_dict[three_max_track_id]))
+tmp_sentence_list = []
+tmp_track_list = []
 
-print('유사도 15%가 넘는 모든 곡을 확인합니다.\n')
+print('\n분석 결과 가장 유사한 문장: %s'%sentence_list[three_max_index])
+print('분석 결과 가장 유사한 곡은 %s의 %s\n'%(track_artist_info_dict[three_max_track_id], track_song_info_dict[three_max_track_id]))
 
-tmp_list = []
-dict_sentence = {}
-dict_track = {}
+tmp_sentence_list.append(sentence_list[three_max_index])
+tmp_track_list.append(three_max_track_id)
+
 
 # total = 이중리스트
-# total = [ [아티스트, 곡, 유사도, 문장] ]
+# total = [[아티스트, 곡, 유사도, 문장]]
 total = []
 
-for i in range(0, len(three_gram_score_list)):
-    if three_gram_score_list[i] > 0.15:
-        if(sentence_list[i] not in tmp_list):
-            tmp_list.append(sentence_list[i])
+try:
+    for i in range(0, len(three_gram_score_list)):
+        if three_gram_score_list[i] > 0.15:
+            if(sentence_list[i] not in tmp_sentence_list and track_id_list[i] not in tmp_track_list):
+                tmp_sentence_list.append(sentence_list[i])
+                tmp_track_list.append(track_id_list[i])
+                total.append([track_artist_info_dict[track_id_list[i]], track_song_info_dict[track_id_list[i]], three_gram_score_list[i], sentence_list[i]])
 
-            total.append([track_artist_info_dict[track_id_list[i]], track_song_info_dict[track_id_list[i]], three_gram_score_list[i], sentence_list[i]])
+    total.sort(key=lambda x:x[2], reverse=True)
 
-total.sort(key=lambda x:x[2], reverse=True)
+    if len(total) >0:
+        print('유사한 다른 곡들도 확인합니다.\n')
 
-for t in total:
-    print('%s의 %s / 유사도: %s / 비교된 문장: %s' % (t[0], t[1], t[2], t[3]))
+        for t in total:
+            print('%s의 %s / 유사한 문장: %s' % (t[0], t[1], t[3]))
+except KeyError:
+    sys.exit(1)
