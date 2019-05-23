@@ -55,8 +55,8 @@ three_gram_word_list = []
 for s in sentence_list:
     # 3-gram
     r3, word3  = diff_ngram(base, s, 3)
-    three_gram_score_list.append(r2)
-    three_gram_word_list.append(word2)
+    three_gram_score_list.append(r3)
+    three_gram_word_list.append(word3)
 
 
 print('\n비교 대상 문장: %s\n'%base)
