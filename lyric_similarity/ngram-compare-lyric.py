@@ -47,8 +47,6 @@ def diff_ngram(sa, sb, num):
                 r.append(i)
     return cnt / len(a), r
 
-two_gram_score_list = []
-two_gram_word_list = []
 three_gram_score_list = []
 three_gram_word_list = []
 
