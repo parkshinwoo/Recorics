@@ -81,7 +81,6 @@ for i in range(0, len(three_gram_score_list)):
     if three_gram_score_list[i] > 0.15:
         if(sentence_list[i] not in tmp_list):
             tmp_list.append(sentence_list[i])
-
             total.append([track_info_dict[track_id_list[i]], three_gram_score_list[i], sentence_list[i]])
 
 total.sort(key=lambda x:x[1], reverse=True)
