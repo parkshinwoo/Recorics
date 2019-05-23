@@ -60,7 +60,6 @@ for s in sentence_list:
 
 
 print('\n비교 대상 문장: %s\n'%base)
-print('유사도 15%를 넘는 문장을 출력합니다.')
 
 # 3-gram
 three_max_index = three_gram_score_list.index(max(three_gram_score_list))
