@@ -6,7 +6,6 @@ parser.add_argument('artist', help='artist you wanna compare with specific sente
 args = parser.parse_args()
 
 artist = args.artist
-
 base = input('비교를 원하는 문장을 입력하세요: ')
 
 wb = load_workbook('%s.xlsx'%artist)
@@ -56,7 +55,7 @@ three_gram_word_list = []
 for s in sentence_list:
     # 2-gram
     r2, word2 = diff_ngram(base, s, 2)
-    two_gram_score_list.append(r2)
+    two_gram_score_list.append(r2)  
     two_gram_word_list.append(word2)
 
     # 3-gram
@@ -70,8 +69,8 @@ print('유사도 15%를 넘는 문장을 출력합니다.')
 
 # 3-gram
 three_max_index = three_gram_score_list.index(max(three_gram_score_list))
-
 three_max_track_id = track_id_list[three_max_index]
+
 print('\n3-gram 분석 결과 가장 유사한 문장: %s'%sentence_list[three_max_index])
 print('3-gram 분석 결과 유사한 단어 리스트%s'%three_gram_word_list[three_max_index])
 print('3-gram 분석 결과 가장 유사한 곡: %s\n'%track_info_dict[three_max_track_id])
@@ -82,23 +81,17 @@ tmp_list = []
 dict_sentence = {}
 dict_track = {}
 
-i = 0
-for val in three_gram_score_list:
-    if val > 0.15:
-        if(sentence_list[i] not in tmp_list):      
+# total = 이중리스트
+# total = [ [곡, 유사도, 문장] ]
+total = []
+
+for i in range(0, len(three_gram_score_list)):
+    if three_gram_score_list[i] > 0.15:
+        if(sentence_list[i] not in tmp_list):
             tmp_list.append(sentence_list[i])
 
-            dict_sentence[sentence_list[i]] = val
-            
-            three_gram_track_id = track_id_list[i]
-            dict_track[track_info_dict[three_gram_track_id]] = val
-    i+=1
+            total.append([track_info_dict[track_id_list[i]], three_gram_score_list[i], sentence_list[i]])
 
-dict_sentence = sorted(dict_sentence.items(), key=operator.itemgetter(1), reverse=True)
-dict_track = sorted(dict_track.items(), key=operator.itemgetter(1), reverse=True)
-
-for i in range(0, len(dict_sentence)):
-    try:
-        print('곡: %s / 유사도: %s / 비교된 문장: %s\n'%(dict_track[i][0], dict_sentence[i][1], dict_sentence[i][0]))
-    except IndexError:
-        sys.exit(1)
+total.sort(key=lambda x:x[1], reverse=True)
+for a in total:
+    print('곡: %s / 유사도: %s / 비교된 문장: %s' % (a[0], a[1], a[2]))
