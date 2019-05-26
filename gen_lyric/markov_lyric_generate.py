@@ -97,7 +97,7 @@ def gen_lyric():
 lyric_result = gen_lyric()
 
 while(True):
-    if(len(lyric_result) > 200 and len(lyric_result) < 1000):
+    if(len(lyric_result) > 500 and len(lyric_result) < 1000):
         print(lyric_result)
         sys.exit(0)
     else:
