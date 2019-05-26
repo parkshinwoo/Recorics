@@ -79,30 +79,41 @@ print('해당 곡의 전체 가사를 보여드릴게요\n\n')
 max_song_line_number = track_num_line_info_dict[three_max_track_id]
 max_song_start_index = track_id_list.index(three_max_track_id)
 
+max_song_entire = ''
 for i in range(0, max_song_line_number):
-    print(sentence_list[max_song_start_index + i])
+    max_song_entire += sentence_list[max_song_start_index + i] + '\n'
+
+print(max_song_entire)
 
 tmp_sentence_list.append(sentence_list[three_max_index])
 tmp_track_list.append(three_max_track_id)
 
 # total = 이중리스트
-# total = [[아티스트, 곡, 유사도, 문장]]
+# total = [[아티스트, 곡, 유사도, 문장, 트랙아이디]]
 total = []
 
 try:
     for i in range(0, len(three_gram_score_list)):
         if three_gram_score_list[i] > 0.15:
-            if(sentence_list[i] not in tmp_sentence_list and track_id_list[i] not in tmp_track_list):
+            if(sentence_list[i] not in tmp_sentence_list):
                 tmp_sentence_list.append(sentence_list[i])
                 tmp_track_list.append(track_id_list[i])
-                total.append([track_artist_info_dict[track_id_list[i]], track_song_info_dict[track_id_list[i]], three_gram_score_list[i], sentence_list[i]])
+                total.append([track_artist_info_dict[track_id_list[i]], track_song_info_dict[track_id_list[i]], three_gram_score_list[i], sentence_list[i], track_id_list[i]])
 
     total.sort(key=lambda x:x[2], reverse=True)
 
-    if len(total) >0:
-        print('\n\n유사한 다른 곡들도 확인합니다.\n')
+    tmp_track_check_list = []
 
-        for t in total:
-            print('%s의 %s / 유사한 문장: %s' % (t[0], t[1], t[3]))
+    result = []
+
+    for t in total:
+        if t[4] not in tmp_track_check_list:
+            result.append(t)
+            tmp_track_check_list.append(t[4])
+
+    if len(result) > 0:
+        print('\n유사한 다른 곡들도 확인합니다.\n')
+        for r in result:
+            print('%s의 %s / 유사한 문장: %s' % (r[0], r[1], r[3]))
 except KeyError:
     sys.exit(1)
