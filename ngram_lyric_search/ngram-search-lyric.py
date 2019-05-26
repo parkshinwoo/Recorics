@@ -24,10 +24,12 @@ max_row = track_sheet.max_row
 
 track_song_info_dict = {}
 track_artist_info_dict = {}
+track_num_line_info_dict = {}
 
 for i in range(2, max_row+1):
     track_song_info_dict[track_sheet['C%d'%i].value] = track_sheet['B%d'%i].value
     track_artist_info_dict[track_sheet['C%d'%i].value] = track_sheet['A%d'%i].value
+    track_num_line_info_dict[track_sheet['C%d'%i].value] = track_sheet['D%d'%i].value
 
 # n-gram 유사도 비교
 def ngram(s, num):
@@ -47,7 +49,10 @@ def diff_ngram(sa, sb, num):
             if i == j:
                 cnt += 1
                 r.append(i)
-    return cnt / len(a), r
+    if len(a) > 0:
+        return cnt / len(a), r
+    else:
+        return 0, r
 
 three_gram_score_list = []
 three_gram_word_list = []
@@ -68,11 +73,17 @@ tmp_sentence_list = []
 tmp_track_list = []
 
 print('\n분석 결과 가장 유사한 문장: %s'%sentence_list[three_max_index])
-print('분석 결과 가장 유사한 곡은 %s의 %s\n'%(track_artist_info_dict[three_max_track_id], track_song_info_dict[three_max_track_id]))
+print('분석 결과 가장 유사한 곡은 %s의 %s'%(track_artist_info_dict[three_max_track_id], track_song_info_dict[three_max_track_id]))
+print('해당 곡의 전체 가사를 보여드릴게요\n\n')
+
+max_song_line_number = track_num_line_info_dict[three_max_track_id]
+max_song_start_index = track_id_list.index(three_max_track_id)
+
+for i in range(0, max_song_line_number):
+    print(sentence_list[max_song_start_index + i])
 
 tmp_sentence_list.append(sentence_list[three_max_index])
 tmp_track_list.append(three_max_track_id)
-
 
 # total = 이중리스트
 # total = [[아티스트, 곡, 유사도, 문장]]
@@ -89,7 +100,7 @@ try:
     total.sort(key=lambda x:x[2], reverse=True)
 
     if len(total) >0:
-        print('유사한 다른 곡들도 확인합니다.\n')
+        print('\n\n유사한 다른 곡들도 확인합니다.\n')
 
         for t in total:
             print('%s의 %s / 유사한 문장: %s' % (t[0], t[1], t[3]))
