@@ -1,0 +1,66 @@
+```{r}
+library(readxl)
+naver_chart <- read_excel("2018.xlsx")
+naver_chart
+```
+```{r}
+agg_rank <- aggregate(x=naver_chart$rank_score, list(artist=naver_chart$artist),FUN=sum)
+
+```
+```{r}
+artist_count <- table(naver_chart$artist)
+str(artist_count)
+```
+```{r}
+artist_count_df <- as.data.frame(artist_count)
+```
+```{r}
+names(artist_count_df) <- c("artist", "count")
+```
+
+```{r}
+library(dplyr)
+```
+```{r}
+artist_title_count_df <- naver_chart %>% group_by(artist, title) %>% summarize(title_count=n())
+```
+```{r}
+artist_title_number_df <- artist_title_count_df %>% group_by(artist) %>% summarize(title_number=n())
+```
+```{r}
+artist_year_points <- naver_chart %>% group_by(year, artist) %>% summarize(artist_year_point=sum(rank_score))
+```
+```{r}
+artist_year_points_max <- artist_year_points %>% group_by(artist) %>% summarize(artist_year_point_max=max(artist_year_point))
+```
+```{r}
+artist_year_points_merge <- merge(x=artist_year_points, y=artist_year_points_max, by.x=c("artist", "artist_year_point"), by.y=c("artist", "artist_year_point_max"))
+```
+```{r}
+names(artist_year_points_merge)[3] <- c("max_year")
+names(artist_year_points_merge)[2] <- c("artist_max_year_point")
+```
+```{r}
+agg_artist <- merge(artist_title_number_df, artist_count_df, by="artist")
+```
+```{r}
+agg_artist <- merge(agg_artist, agg_rank, by="artist")
+```
+```{r}
+names(agg_artist)[4] <- c("artist_point")
+```
+```{r}
+agg_artist <- merge(agg_artist, artist_year_points_merge, by="artist")
+```
+```{r}
+
+```
+```{r}
+agg_artist4 <- filter(agg_artist %>% arrange(desc(artist_point)) %>% head(20))
+```
+```{r}
+```
+```{r}
+```
+
+

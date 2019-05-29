@@ -1,0 +1,32 @@
+```{r}
+group1 <- subset(agg_artist4, subset = (cluster==1))
+group2 <- subset(agg_artist4, subset = (cluster==2))
+group3 <- subset(agg_artist4, subset = (cluster==3))
+group4 <- subset(agg_artist4, subset = (cluster==4))
+group5 <- subset(agg_artist4, subset = (cluster==5))
+group6 <- subset(agg_artist4, subset = (cluster==6))
+
+
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=artist_point), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group1, aes(y=as.numeric(title_number)-sqrt(artist_point)/10, label=artist), vjust=1, colour="black", size=4)+ggtitle("Bubble chart about Artists between 2019 (Group1)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=artist_point), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group2, aes(y=as.numeric(title_number)-sqrt(artist_point)/10, label=artist), vjust=1, colour="black", size=4)+ggtitle("Bubble chart about Artists between 2019 (Group2)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=artist_point), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group3, aes(y=as.numeric(title_number)-sqrt(artist_point)/10, label=artist), vjust=1, colour="black", size=4)+ggtitle("Bubble chart about Artists between 2019 (Group3)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=artist_point), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group4, aes(y=as.numeric(title_number)-sqrt(artist_point)/10, label=artist), vjust=1, colour="black", size=4)+ggtitle("Bubble chart about Artists between 2019 (Group4)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=artist_point), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group5, aes(y=as.numeric(title_number)-sqrt(artist_point)/10, label=artist), vjust=1, colour="black", size=4)+ggtitle("Bubble chart about Artists between 2019 (Group5)")
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=artist_point), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(data = group6, aes(y=as.numeric(title_number)-sqrt(artist_point)/10, label=artist), vjust=1, colour="black", size=4)+ggtitle("Bubble chart about Artists between 2019 (Group6)")
+```
+
+
+
+

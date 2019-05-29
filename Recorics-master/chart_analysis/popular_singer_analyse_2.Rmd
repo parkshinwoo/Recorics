@@ -1,0 +1,40 @@
+```{r}
+library(readxl)
+naver_chart <- read_excel("2018.xlsx")
+```
+```{r}
+library(dplyr)
+```
+```{r}
+naver_chart[,6] <- as.integer(as.character(naver_chart$year))
+str(naver_chart)
+```
+```{r}
+table(naver_chart$year)
+```
+```{r}
+interests2 <- agg_artist4[2:4]
+```
+```{r}
+interests2_z <- as.data.frame(lapply(interests2, scale)) # z-score
+```
+```{r}
+artist_clusters_new <- kmeans(interests2_z, 6)
+artist_clusters_new$size
+```
+```{r}
+artist_clusters_new$centers
+```
+```{r}
+library(ggplot2)
+```
+```{r}
+agg_artist4[,7] <- artist_clusters_new$cluster
+colnames(agg_artist4)[7] <- c("cluster")
+agg_artist4$cluster <- as.factor(agg_artist4$cluster)
+```
+```{r}
+ggplot(agg_artist4, aes(x=count, y=title_number, colour=cluster))+geom_point(aes(size=artist_point), shape=19, alpha=0.5)+scale_size_area(max_size=15)+geom_text(aes(y=as.numeric(title_number)-sqrt(artist_point)/10, label=artist), vjust=1, colour="black", size=4)+ggtitle("Bubble chart about Artists between 2019")
+```
+
+
