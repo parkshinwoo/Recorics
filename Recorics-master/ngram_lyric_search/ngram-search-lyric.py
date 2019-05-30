@@ -94,7 +94,7 @@ total = []
 
 try:
     for i in range(0, len(three_gram_score_list)):
-        if three_gram_score_list[i] > 0.15:
+        if three_gram_score_list[i] > 0.25:
             if(sentence_list[i] not in tmp_sentence_list):
                 tmp_sentence_list.append(sentence_list[i])
                 tmp_track_list.append(track_id_list[i])
