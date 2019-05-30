@@ -102,7 +102,7 @@ try:
 
     total.sort(key=lambda x:x[2], reverse=True)
 
-    tmp_track_check_list = []
+    tmp_track_check_list = [three_max_track_id]
 
     result = []
 
